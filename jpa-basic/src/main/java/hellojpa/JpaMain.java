@@ -15,9 +15,25 @@ public class JpaMain {
 
 
         try {
+            Team team = new Team();
+            team.setName("TEAMA");
+            em.persist(team);
+
             Member member = new Member();
-            member.setName("Defian");
+            member.setUsername("Defian");
+            member.setTeam(team);
+
             em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            Member findMember = em.find(Member.class,member.getId());
+            List<Member> members = findMember.getTeam().getMembers();
+            for (Member m : members){
+                System.out.println("m.getUsername() = " + m.getUsername());
+            }
+
 
             tx.commit();
             System.out.println("TRANSACTION COMMIT");
