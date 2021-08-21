@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -15,19 +16,24 @@ public class JpaMain {
 
 
         try {
-            Movie movie = new Movie();
-            movie.setDirector("defian");
-            movie.setActor("bbb");
-            movie.setName("바람과하ㅏㅁ꼐 싸라지다");
-            movie.setPrice(1000);
 
-            em.persist(movie);
+            Child child1 = new Child();
+            Child child2 = new Child();
+
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
+            em.persist(child1);
+            em.persist(child2);
 
             em.flush();
             em.clear();
 
-            Item movie1 = em.find(Item.class, movie.getId());
-            System.out.println("movie = " + movie1.getId());
+            Parent findParent = em.find(Parent.class, parent.getId());
+            em.remove(findParent);
+
 
             tx.commit();
             System.out.println("TRANSACTION COMMIT");
