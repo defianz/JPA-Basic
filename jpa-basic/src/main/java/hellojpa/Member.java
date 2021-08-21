@@ -3,10 +3,12 @@ package hellojpa;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-public class Member extends BaseEntity {
+public class Member {
 
     @Id @GeneratedValue
     @Column(name = "MEMBER_ID")
@@ -30,7 +32,25 @@ public class Member extends BaseEntity {
     @JoinTable(name="MEMBER_PRODUCT")
     private List<Product> products = new ArrayList<>();
 
+    @Embedded
+    private Period workPeriod;
 
+    @Embedded
+    private Address homeAddress;
+
+
+    @ElementCollection
+    @CollectionTable(name = "FAVODRITE_FOOD", joinColumns =
+            @JoinColumn(name="MEMBER_ID")
+    )
+    @Column(name = "FOOD_NAME")
+    private Set<String> favoriteFoods = new HashSet<>();
+
+    @ElementCollection
+    @CollectionTable(name = "ADDRESS", joinColumns =
+            @JoinColumn(name = "MEMBER_IO")
+    )
+    private List<Address> addressHistory = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -56,17 +76,27 @@ public class Member extends BaseEntity {
         this.team = team;
     }
 
-//    public void changeTeam(Team team) {
-//        this.team = team;
-//        team.getMembers().add(this);
-//    }
+    public List<Product> getProducts() {
+        return products;
+    }
 
-    @Override
-    public String toString() {
-        return "Member{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", team=" + team +
-                '}';
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public Period getWorkPeriod() {
+        return workPeriod;
+    }
+
+    public void setWorkPeriod(Period workPeriod) {
+        this.workPeriod = workPeriod;
+    }
+
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
     }
 }

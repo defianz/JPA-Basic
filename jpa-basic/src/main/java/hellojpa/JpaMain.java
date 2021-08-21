@@ -17,23 +17,21 @@ public class JpaMain {
 
         try {
 
-            Child child1 = new Child();
-            Child child2 = new Child();
+            Address address = new Address("city", "street", "100");
 
-            Parent parent = new Parent();
-            parent.addChild(child1);
-            parent.addChild(child2);
+            Member member = new Member();
+            member.setUsername("Defian1");
+            member.setHomeAddress(address);
+            member.setWorkPeriod(new Period());
+            em.persist(member);
 
-            em.persist(parent);
-            em.persist(child1);
-            em.persist(child2);
+            Member member2 = new Member();
+            member2.setUsername("Defian2");
+            member2.setHomeAddress(address);
+            member2.setWorkPeriod(new Period());
+            em.persist(member2);
 
-            em.flush();
-            em.clear();
-
-            Parent findParent = em.find(Parent.class, parent.getId());
-            em.remove(findParent);
-
+            member.getHomeAddress().setCity("newCity");
 
             tx.commit();
             System.out.println("TRANSACTION COMMIT");
