@@ -16,6 +16,17 @@ public class Member {
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
+    @Enumerated(value = EnumType.STRING)
+    private MemberType membertype;
+
+    public MemberType getMembertype() {
+        return membertype;
+    }
+
+    public void setMembertype(MemberType membertype) {
+        this.membertype = membertype;
+    }
+
     public Long getId() {
         return id;
     }

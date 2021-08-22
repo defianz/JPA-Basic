@@ -1,9 +1,6 @@
 package jpql;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class JpaMain {
@@ -20,22 +17,22 @@ public class JpaMain {
             team.setName("TEAM A");
             em.persist(team);
 
-            for (int i=0; i<100; i++){
+            for (int i=0; i<1; i++){
                 Member member = new Member();
                 member.setUsername("DEFIAN" + i);
                 member.setAge(i);
                 member.chageTeam(team);
+                member.setMembertype(MemberType.A);
                 em.persist(member);
             }
-
-
 
             em.flush();
             em.clear();
 
-            String query = "select m from Member m left join Team t on t.name = 'TEAM A'";
-            List<Member> resultList = em.createQuery(query, Member.class)
-                    .getResultList();
+
+            String query = "select index(t.memberList) FROM Team t ";
+            List<Member> result = em.createQuery(query).getResultList();
+            System.out.println("result.get(0) = " + result.get(0));
 
             tx.commit();
             System.out.println("TRANSACTION COMMIT");
