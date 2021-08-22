@@ -1,13 +1,9 @@
-package hellojpa;
+package jpql;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -20,14 +16,26 @@ public class JpaMain {
 
         try {
 
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Member> query = cb.createQuery(Member.class);
+            Team team = new Team();
+            team.setName("TEAM A");
+            em.persist(team);
 
-            Root<Member> m = query.from(Member.class);
+            for (int i=0; i<100; i++){
+                Member member = new Member();
+                member.setUsername("DEFIAN" + i);
+                member.setAge(i);
+                member.chageTeam(team);
+                em.persist(member);
+            }
 
-            CriteriaQuery<Member> cq = query.select(m).where(cb.equal(m.get("username"),"kim"));
 
-            List<Member> resultList = em.createQuery(cq).getResultList();
+
+            em.flush();
+            em.clear();
+
+            String query = "select m from Member m left join Team t on t.name = 'TEAM A'";
+            List<Member> resultList = em.createQuery(query, Member.class)
+                    .getResultList();
 
             tx.commit();
             System.out.println("TRANSACTION COMMIT");
