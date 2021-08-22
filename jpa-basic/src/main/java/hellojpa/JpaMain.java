@@ -23,6 +23,11 @@ public class JpaMain {
             member.setUsername("Defian1");
             member.setHomeAddress(address);
             member.setWorkPeriod(new Period());
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("족발");
+            member.getFavoriteFoods().add("피자");
+
+
             em.persist(member);
 
             Member member2 = new Member();
