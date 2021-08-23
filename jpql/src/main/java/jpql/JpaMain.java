@@ -12,27 +12,30 @@ public class JpaMain {
 
 
         try {
-
             Team team = new Team();
-            team.setName("TEAM A");
+            team.setName("팀A");
             em.persist(team);
 
-            for (int i=0; i<1; i++){
-                Member member = new Member();
-                member.setUsername("DEFIAN" + i);
-                member.setAge(i);
-                member.chageTeam(team);
-                member.setMembertype(MemberType.A);
-                em.persist(member);
-            }
+            Team team2 = new Team();
+            team2.setName("팀B");
+            em.persist(team2);
+
+            makeMember("회원1",team,em);
+            makeMember("회원2",team,em);
+            makeMember("회원3",team2,em);
+            makeMember("회원4",null,em);
+
 
             em.flush();
             em.clear();
+            System.out.println("==============================");
 
 
-            String query = "select m.team FROM Member m";
-            List<Member> result = em.createQuery(query).getResultList();
-            System.out.println("result.get(0) = " + result.get(0));
+            int resultCount = em.createQuery("update Member m set m.age = 20")
+                    .executeUpdate();
+            em.clear();
+            System.out.println("resultCount = " + resultCount);
+
 
             tx.commit();
             System.out.println("TRANSACTION COMMIT");
@@ -45,4 +48,16 @@ public class JpaMain {
         // close
         emf.close();
     }
+
+
+    private static Member makeMember(String name, Team team, EntityManager em){
+        Member member = new Member();
+        member.setUsername(name);
+        if(team != null){
+            member.chageTeam(team);
+        }
+        em.persist(member);
+        return member;
+    }
+
 }
