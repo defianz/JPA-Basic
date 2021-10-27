@@ -1,9 +1,6 @@
 package jpabook.jpashop;
 
-import jpabook.jpashop.domain.Book;
-import jpabook.jpashop.domain.Item;
-import jpabook.jpashop.domain.Order;
-import jpabook.jpashop.domain.OrderItem;
+import jpabook.jpashop.domain.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,14 +18,18 @@ public class JpaMain {
 
         try {
 
+
+
+
             Book book = new Book();
-            book.setName("Defian");
-            book.setAuthor("김형철");
+            book.setAuthor("defianzz");
 
             em.persist(book);
 
-            em.createQuery("select i from Item i where type(i) = Book", Item.class).getResultList();
-
+            BookStore bookStore = new BookStore();
+            bookStore.setName("defian");
+            book.setBookStore(bookStore);
+            em.persist(bookStore);
 
             System.out.println("TRANSACTION COMMIT");
             tx.commit();
